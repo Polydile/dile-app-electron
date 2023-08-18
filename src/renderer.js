@@ -27,5 +27,18 @@
  */
 
 import './index.css';
+import axios from 'axios';
 
-console.log('👋 This message is being logged by "renderer.js", included via webpack');
+import { login } from './modules/auth.js';
+login()
+  .then( data => {
+    console.log(data);
+    let token = data.token;
+    axios.get('http://localhost/api/user', {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
+      .then( res => console.log(res.data) )
+      .catch( err => console.log(err) ) 
+  });
