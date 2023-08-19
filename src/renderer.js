@@ -27,18 +27,20 @@
  */
 
 import './index.css';
+import './components/dile-app-electron.js';
 import axios from 'axios';
 
-import { login } from './modules/auth.js';
-login()
-  .then( data => {
-    console.log(data);
-    let token = data.token;
-    axios.get('http://localhost/api/user', {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    })
-      .then( res => console.log(res.data) )
-      .catch( err => console.log(err) ) 
-  });
+
+// import { login } from './modules/auth.js';
+// login()
+//   .then(data => {
+//     console.log(data);
+//     let token = data.token;
+//     axios.get('http://localhost/api/user', {
+//       headers: {
+//         'Authorization': `Bearer ${token}`
+//       }
+//     })
+//       .then(res => console.log(res.data))
+//       .catch(err => console.log(err))
+//   });
