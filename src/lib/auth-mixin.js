@@ -42,11 +42,7 @@ export const AuthMixin = (Superclass) => class extends FeedbackMixin(Superclass)
           this.dispatchUserDetected();
         })
         .catch((err) => {
-          if (err.response.status === 401) {
-            this.dispatchNotLoggedIn();
-          } else {
-            throw err;
-          }
+          this.dispatchNotLoggedIn();
         });
     }
   }
@@ -61,14 +57,7 @@ export const AuthMixin = (Superclass) => class extends FeedbackMixin(Superclass)
         this.dispachCheckAuth()
         this.dispatchNavigate('home'); 
       })
-      .catch(error => {
-        this.showErrors(error.response.data.errors);
-        if (error.response.status == 401) {
-          this.negativeFeedback('Error: ' + error.response.data.message);
-        } else {
-          this.negativeFeedback('Imposible realizar el registro');
-        }
-      })
+      .catch(this.manageError.bind(this));
   }
 
   userLogin(data) {
@@ -80,21 +69,41 @@ export const AuthMixin = (Superclass) => class extends FeedbackMixin(Superclass)
         this.dispachCheckAuth();
         this.dispatchNavigate('home');
       })
-      .catch(error => {
-        this.negativeFeedback(error.response.data.message);
-        this.showErrors(error.response.data.errors);
-      })
+      .catch(this.manageError.bind(this));
   }
 
-  
-
-  
-
   doLogout() {
-    this.removeToken();
-    this.positiveFeedback('Logout realizado');
-    this.user = null;
-    this.dispatchLogoutDetected();
+    this.axios
+      .get('api/auth/logout')
+      .then((response) => {
+        this.positiveFeedback(response.data.message);
+        this.removeToken();
+        this.user = null;
+        this.dispatchLogoutDetected();
+      })
+      .catch((err) => {
+        this.negativeFeedback(this.getErrorMessage(err.response));
+      });
+  }
+
+  // ERROR MANAGEMENT
+  manageError(err) {
+    this.negativeFeedback(this.getErrorMessage(err.response));
+    if(err.response.data.errors) {
+      this.showErrors(err.response.data.errors);
+    }
+  }
+  getErrorMessage(response) {
+    let status = response.status;
+    let message = response.data.message;
+    switch(status) {
+      case 500:
+        return 'Server error, please try again later';
+      case 401:
+        return 'Unauthorized error: ' + message;
+      default:
+        return message;
+    }
   }
 
   // EVENTOS
