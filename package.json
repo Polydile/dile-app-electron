@@ -1,8 +1,8 @@
 {
-  "name": "sanctum-auth",
-  "productName": "sanctum-auth",
+  "name": "dlie-app-electron",
+  "productName": "Electron App with authentication",
   "version": "1.0.0",
-  "description": "My Electron application description",
+  "description": "Electron application with token authentication. The frontend is based on lit and dile components and the backend is based on laravel sanctum.",
   "main": ".webpack/main",
   "scripts": {
     "start": "electron-forge start",
