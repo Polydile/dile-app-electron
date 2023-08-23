@@ -56,7 +56,6 @@ export class DileUserMenu extends LitElement {
           <b>${this.user.name}</b>
           <dile-icon .icon="${arrowDropDownIcon}"></dile-icon>
         </span>
-import { userMenuButtonStyles } from './user-menu-button-styles.js';
         <div slot="content" class="loginbutton">
           <a href="#" @click="${this.dispatchLogout}" class="loginoption">logout</a>
         </div>

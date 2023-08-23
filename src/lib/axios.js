@@ -2,13 +2,16 @@ import Axios from 'axios';
 
 let backendUrl = 'http://localhost';
 
-export const axios = Axios.create({
-  baseURL: backendUrl,
-  headers: {
+export const axiosCreator = (token = null) => {
+  const headers = {
     'X-Requested-With': 'XMLHttpRequest',
-    'Accept': 'application/json'
-  },
-  //withCredentials: true
-});
-
-
+    'Accept': 'application/json',
+  };
+  if(token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
+  return Axios.create({
+    baseURL: backendUrl,
+    headers
+  });
+};

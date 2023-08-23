@@ -18,8 +18,18 @@ export class DileUser extends AuthMixin(LitElement) {
         display: flex;
         align-items: center;
       }
+      .loginoption {
+        cursor: pointer;
+      }
     `
   ];
+
+  constructor() {
+    super();
+    document.addEventListener('check-auth', () => {
+      this.checkAuth();
+    });
+  }
 
   render() {
     return html`
@@ -29,8 +39,8 @@ export class DileUser extends AuthMixin(LitElement) {
           <dile-menu-overlay class="loginoverlay" horizontalAlign="under" moveLeft="15">
             <div class="loginbutton" slot="trigger"><dile-icon .icon="${accountIcon}"></dile-icon></div>
             <div slot="content">
-              <a class="loginoption" href="/login">Login</a>
-              <a class="loginoption" href="/register">Register</a>
+              <a class="loginoption" @click=${this.gotoLogin}>Login</a>
+              <a class="loginoption" @click=${this.gotoRegister}>Register</a>
             </div>
           </dile-menu-overlay>
         `
@@ -40,7 +50,19 @@ export class DileUser extends AuthMixin(LitElement) {
 
   firstUpdated() {
     this.checkAuth();
+    this.menu = this.shadowRoot.querySelector('dile-menu-overlay');
   }
-  
+
+  gotoLogin() {
+    this.goto('login')
+  }
+  gotoRegister() {
+    this.goto('register');
+  }
+
+  goto(page) {
+    this.dispatchNavigate(page);
+    this.menu.close();
+  }
 }
 customElements.define('dile-user', DileUser);

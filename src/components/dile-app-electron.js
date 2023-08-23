@@ -11,10 +11,11 @@ import '@dile/dile-spinner/dile-spinner-modal';
 
 // imports locales
 import './user/dile-user';
+import './dile-feedback';
 
 // Estilos tema
 import { dileAppTheme } from './styles/theme';
-import { logo } from './images/temporizador'
+import { logo } from './images/temporizador';
 
 export class DileAppElectron extends LitElement {
   static get styles() {
@@ -50,9 +51,15 @@ export class DileAppElectron extends LitElement {
     ]
   };
 
+  constructor() {
+    super();
+    this.page = 'home';
+    this.addEventListener('navigate', this.navigateHandler.bind(this));
+  }
+
   static get properties() {
     return {
-        section: { type: String },
+        page: { type: String },
         user: { type: Object },
     };
   }
@@ -69,7 +76,7 @@ export class DileAppElectron extends LitElement {
         <dile-menu-hamburger hamburgerAlwaysVisible slot="menu" direction="left">
           <div slot="menu" class="app-menu">
             <dile-selector class="drawernav" selected=${this.page} attrForSelected="name"
-                @dile-selected-changed=${this.navitateSelected}>
+                @dile-selected-changed=${this.navigateSelected}>
                 <dile-selector-item icon="navigate_next" name="home">Home</dile-selector-item>
                 <dile-selector-item icon="navigate_next" name="contact">Contact us</dile-selector-item>
             </dile-selector>
@@ -84,21 +91,55 @@ export class DileAppElectron extends LitElement {
       <main @check-auth=${this.checkAuth}>
         ${this.user === undefined
           ? html`<dile-spinner-modal active></dile-spinner-modal>`
-          : this.displaySection(this.section)
+          : this.displaySection(this.page)
         }
       </main>
     
     <dile-feedback></dile-feedback>
-    <dile-resend-confirmation-email .user="${this.user}"></dile-resend-confirmation-email>  
     `;
   }
-  setLogout() {
-    console.log('seteo el user a null');
-    this.user = null;
+
+  displaySection(section) {
+    switch (section) {
+      case 'home':
+        import('./pages/dile-page-home.js');
+        return html`<dile-page-home></dile-page-home>`;
+      case 'login':
+        import('./pages/dile-page-login.js');
+        return html`<dile-page-login .user=${this.user}></dile-page-login>`;
+      case 'register':
+        import('./pages/dile-page-register.js');
+        return html`<dile-page-register .user=${this.user}></dile-page-register>`;
+      case 'contact':
+        //import('./pages/dile-page-contact.js');
+        return html`<dile-page-contact></dile-page-contact>`;
+      case 'reset-password':
+        //import('./pages/dile-page-password-reset.js');
+        return html`<dile-page-password-reset></dile-page-password-reset>`;
+      default:
+        return html`<dile-page-home></dile-page-home>`;
+    }
   }
 
-  displaySection() {
+  navigateHandler(e) {
+    this.navigate(e.detail.page);
+  }
 
+  navigateSelected(e) {
+    this.navigate(e.detail.selected);
+    this.closeDrawer();
+  }
+
+  navigate(page) {
+    this.page = page;
+  }
+
+  setUser(e) {
+    this.user = e.detail.user;
+  }
+
+  setLogout() {
+    this.user = null;
   }
 }
 customElements.define('dile-app-electron', DileAppElectron);

@@ -15,10 +15,13 @@ export const FeedbackMixin = (Superclass) => class extends Superclass {
   }
 
   dispatchNavigate(url) {
+    console.log('dispatchNavigate', url);
     this.dispatchEvent(new CustomEvent('navigate', {
       bubbles: true,
       composed: true,
-      detail: url,
+      detail: {
+        page: url,
+      }
     }));
   }
 }
