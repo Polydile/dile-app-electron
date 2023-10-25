@@ -1,6 +1,6 @@
 import Axios from 'axios';
 
-let backendUrl = 'http://localhost';
+let backendUrl = 'https://timer.escuelait.com';
 
 export const axiosCreator = (token = null) => {
   const headers = {

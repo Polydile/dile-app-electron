@@ -1,5 +1,5 @@
 {
-  "name": "dlie-app-electron",
+  "name": "dile-app-electron",
   "productName": "Electron App with authentication",
   "version": "1.0.0",
   "description": "Electron application with token authentication. The frontend is based on lit and dile components and the backend is based on laravel sanctum.",

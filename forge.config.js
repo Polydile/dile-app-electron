@@ -30,7 +30,7 @@ module.exports = {
       name: '@electron-forge/plugin-webpack',
       config: {
         mainConfig: './webpack.main.config.js',
-        devContentSecurityPolicy: "connect-src 'self' http://localhost 'unsafe-eval'",
+        devContentSecurityPolicy: "connect-src 'self' https://timer.escuelait.com/ 'unsafe-eval'",
         renderer: {
           config: './webpack.renderer.config.js',
           entryPoints: [
